@@ -17,8 +17,9 @@ def get_redis():
         g.redis = Redis(host=redis_host, db=0, socket_timeout=5)
     return g.redis
 
-@app.route("/", methods=['POST','GET'])
-def hello():
+@app.route('/', methods=['POST','GET'], defaults={'path': ''})
+@app.route('/<path:path>', methods=['POST','GET'])
+def hello(path):
     voter_id = request.cookies.get('voter_id')
     if not voter_id:
         voter_id = hex(random.getrandbits(64))[2:-1]
