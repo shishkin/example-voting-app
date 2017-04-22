@@ -16,8 +16,11 @@ namespace Worker
         {
             try
             {
-                var pgsql = OpenDbConnection("Server=db;Username=postgres;");
-                var redisConn = OpenRedisConnection("redis");
+                var pgHost = Environment.GetEnvironmentVariable("PGHOST") ?? "db";
+                var pgConnString = $"Server={pgHost};Username=postgres;";
+                var pgsql = OpenDbConnection(pgConnString);
+                var redisHost = Environment.GetEnvironmentVariable("REDIS_HOST") ?? "redis";
+                var redisConn = OpenRedisConnection(redisHost);
                 var redis = redisConn.GetDatabase();
 
                 // Keep alive is not implemented in Npgsql yet. This workaround was recommended:
@@ -31,7 +34,7 @@ namespace Worker
                     // Reconnect redis if down
                     if (redisConn == null || !redisConn.IsConnected) {
                         Console.WriteLine("Reconnecting Redis");
-                        redis = OpenRedisConnection("redis").GetDatabase();
+                        redis = OpenRedisConnection(redisHost).GetDatabase();
                     }
                     string json = redis.ListLeftPopAsync("votes").Result;
                     if (json != null)
@@ -42,7 +45,7 @@ namespace Worker
                         if (!pgsql.State.Equals(System.Data.ConnectionState.Open))
                         {
                             Console.WriteLine("Reconnecting DB");
-                            pgsql = OpenDbConnection("Server=db;Username=postgres;");
+                            pgsql = OpenDbConnection(pgConnString);
                         }
                         else
                         { // Normal +1 vote requested

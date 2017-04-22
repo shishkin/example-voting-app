@@ -8,12 +8,13 @@ import json
 option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
 hostname = socket.gethostname()
+redis_host = os.getenv('REDIS_HOST', "redis")
 
 app = Flask(__name__)
 
 def get_redis():
     if not hasattr(g, 'redis'):
-        g.redis = Redis(host="redis", db=0, socket_timeout=5)
+        g.redis = Redis(host=redis_host, db=0, socket_timeout=5)
     return g.redis
 
 @app.route("/", methods=['POST','GET'])
