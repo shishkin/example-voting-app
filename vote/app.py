@@ -9,10 +9,10 @@ option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
 hostname = socket.gethostname()
 redis_host = os.getenv('REDIS_HOST', "redis")
-appRoot = os.getenv('APPLICATION_ROOT', "/")
+rootPath = os.getenv('ROOT_PATH', "/")
 
 app = Flask(__name__)
-app.config["APPLICATION_ROOT"] = appRoot
+app.config["APPLICATION_ROOT"] = rootPath
 
 def get_redis():
     if not hasattr(g, 'redis'):
@@ -44,14 +44,14 @@ def hello():
     return resp
 
 def redirectToRoot():
-    return redirect(appRoot)
+    return redirect(rootPath)
 
 if __name__ == "__main__":
     from werkzeug.wsgi import DispatcherMiddleware
 
-    if not appRoot == "/":
+    if not rootPath == "/":
         app.wsgi_app = DispatcherMiddleware(redirectToRoot(), {
-            appRoot: app.wsgi_app
+            rootPath: app.wsgi_app
         })
 
     app.run(host='0.0.0.0', port=80, debug=True, threaded=True)
