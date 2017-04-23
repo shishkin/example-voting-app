@@ -10,7 +10,7 @@ RUN mv /app/node_modules /node_modules
 
 ADD . /app
 
-ENV PORT="80" PGHOST="db"
+ENV PORT="80" PGHOST="db" ROOT_PATH="/"
 EXPOSE 80
 
 CMD ["node", "server.js"]
