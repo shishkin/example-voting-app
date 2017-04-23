@@ -16,6 +16,7 @@ io.set('transports', ['polling']);
 
 var port = process.env.PORT || 4000;
 var pgHost = process.env.PGHOST || "db";
+var pgPassword = process.env.PGPASSWORD || "";
 
 io.sockets.on('connection', function (socket) {
 
@@ -29,7 +30,7 @@ io.sockets.on('connection', function (socket) {
 async.retry(
   {times: 1000, interval: 1000},
   function(callback) {
-    pg.connect(`postgres://postgres@${pgHost}/postgres`, function(err, client, done) {
+    pg.connect(`postgres://postgres:${pgPassword}@${pgHost}/postgres`, function(err, client, done) {
       if (err) {
         console.error("Waiting for db");
       }

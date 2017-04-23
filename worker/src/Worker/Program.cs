@@ -17,7 +17,8 @@ namespace Worker
             try
             {
                 var pgHost = Environment.GetEnvironmentVariable("PGHOST") ?? "db";
-                var pgConnString = $"Server={pgHost};Username=postgres;";
+                var pgPassword = Environment.GetEnvironmentVariable("PGPASSWORD") ?? "";
+                var pgConnString = $"Server={pgHost};Username=postgres;Password={pgPassword}";
                 var pgsql = OpenDbConnection(pgConnString);
                 var redisHost = Environment.GetEnvironmentVariable("REDIS_HOST") ?? "redis";
                 var redisConn = OpenRedisConnection(redisHost);

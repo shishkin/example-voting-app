@@ -4,7 +4,7 @@ WORKDIR /code
 
 ADD src/Worker /code/src/Worker
 
-ENV REDIS_HOST="redis" PGHOST="db"
+ENV REDIS_HOST="redis" PGHOST="db" PGPASSWORD=""
 
 RUN dotnet restore -v minimal src/Worker \
     && dotnet publish -c Release -o "./" "src/Worker/"
