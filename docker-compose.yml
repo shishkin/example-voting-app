@@ -3,7 +3,6 @@ version: "3"
 services:
   vote:
     build: ./vote
-    command: python app.py
     volumes:
      - ./vote:/app
     ports:
